@@ -195,11 +195,18 @@ The file can be found in data/weights directory, which is the correct format (.h
 
 The Intersection over Union (IoU) score is 44%. The network obtain an accuracy greather than the threshold (40%).
 
+Some result image of predication are shown below:
+![target](images/target.png)
+
+![without_target](images/without_target.png)
+
+![patrol](images/patrol.png)
+
 Result image and video of QuadRotor Simulator are shown below:
 
 ![fm-1](images/RoboND-QuadRotor-Unity-Simulator.png)
 
-![fm-2](images/RoboND-QuadRotor-Unity-Simulator.mp4)
+![QuadRotor Video](images/RoboND-QuadRotor-Unity-Simulator.mp4)
 
 
 
