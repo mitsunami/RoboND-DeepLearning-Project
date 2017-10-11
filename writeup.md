@@ -23,8 +23,6 @@
 
 This is the Writeup for Deep Learning Follow Me Project.
 
-This report should be written with a technical emphasis (i.e. concrete, supporting information and no 'hand-waiving'). Specifications are met if a reader would be able to replicate what you have done based on what was submitted in the report. This means all network architecture should be explained, parameters should be explicitly stated with factual justifications, and plots / graphs are used where possible to further enhance understanding. A discussion on potential improvements to the project submission should also be included for future enhancements to the network / parameters that could be used to increase accuracy, efficiency, etc. It is not required to make such enhancements, but these enhancements should be explicitly stated in its own section titled "Future Enhancements".
-
 #### 2. The write-up conveys the an understanding of the network architecture.
 
 ##### The network architecture
@@ -151,25 +149,29 @@ def decoder_block(small_ip_layer, large_ip_layer, filters):
 
 #### 3. The write-up conveys the student's understanding of the parameters chosen for the the neural network.
 
-There are many hyper parameters to tune performance of the network. I explain their parameters and why I selected the values. 
+There are many hyper parameters to tune performance of the network. I explain their parameters and why I selected the values. And my training history is shown below:
 
-##### Learning Rate
-In general, lower learning rate of training tends to get a better model faster at the end. Therefore, I tried various patterns of the value. As a result, I chose that `learning_rate = 0.002`.
+![fcn-2](images/training_epochs.png)
+
+In the middle of training, somehow there is a big peak of loss. Although I'm not sure what causes this, I guess that is due to dropping local minimum or computational error.
 
 ##### Batch Size
-Bigger value is preferable. My selected number is `batch_size = 32`.
+Batch is a subset of the dataset. Handling a subset of whole dataset is good way to train a model with when memory is not enough. But it is computationally inefficient. Therefore bigger value is preferable if the system is available. My selected number is `batch_size = 32`.
+
+##### Learning Rate
+In general, lower learning rate of training tends to get a better model faster at the end. But lower rate require more time. Therefore, I tried various patterns of the value. As a result, I chose that `learning_rate = 0.002`.
 
 ##### Number of Epochs
-`num_epochs = 40`
+This parameter indicates a length of training process. This parameter should be determined with learning rate. I chose `num_epochs = 40` with the above learning rate.
 
 ##### Steps per Epoch
-`steps_per_epoch = 200`
+This value indicates the number of training images in an epoch. My setting is `steps_per_epoch = 200`.
 
 ##### Validation Steps
-This parameter relates to number of images to validate. My setting is `validation_steps = 50`
+This parameter relates to number of images to validate. This value should be determined with the number of training image dataset. My setting is `validation_steps = 50`.
 
 ##### Workers
-`workers = 2`
+This is the number of processing thread. This should be decided by system power and performance. My setting is `workers = 2`.
 
 
 #### 4. The student has a clear understanding and is able to identify the use of various techniques and concepts in network layers indicated by the write-up.
@@ -177,14 +179,12 @@ This parameter relates to number of images to validate. My setting is `validatio
 I have already explained the use of vairous techniques like 1x1 convolutions and fully connected layer. Please see above explanations.
 
 #### 5. The student has a clear understanding of image manipulation in the context of the project indicated by the write-up.
-*
-The student is able to identify the use of various reasons for encoding / decoding images, when it should be used, why it is useful, and any problems that may arise.
+
+I have already explained the use of vairous reasons for encoder and decoder and why they are used. Please see above explanations.
 
 #### 6. The student displays a solid understanding of the limitations to the neural network with the given data chosen for various follow-me scenarios which are conveyed in the write-up.
 
-The student is able to clearly articulate whether this model and data would work well for following another object (dog, cat, car, etc.) instead of a human and if not, what changes would be required.
-
-
+In my network model, I can obtain the required score. But more data are needed for various follow-me scenario which is not provided by the project. Furthermore, if I would like the drone to follow another object like dog, cat and car, re-training for such objects will be required.
 
 ### Model
 #### 1. The model is submitted in the correct format.
@@ -195,6 +195,8 @@ The file can be found in data/weights directory, which is the correct format (.h
 
 The Intersection over Union (IoU) score is 44%. The network obtain an accuracy greather than the threshold (40%).
 
+Result image and video of QuadRotor Simulator are shown below:
+
 ![fm-1](images/RoboND-QuadRotor-Unity-Simulator 2017_10_11 13_32_36.png)
 
 ![fm-2](images/RoboND-QuadRotor-Unity-Simulator 2017_10_11 13_35_39.mp4)
@@ -203,35 +205,22 @@ The Intersection over Union (IoU) score is 44%. The network obtain an accuracy g
 
 ### Future Enhancements
 
+I think that there are several ways to improve segmentation accuracy. I list up them for future enhancements.
 
+#### Analyze layer results when the target from far away
+In the current network model, segmentation accuracy when the target from far away is worse than accuracy when near. Then it might be effective to analyze which layer mostly affects the detection of the far target.
 
-#### Better score measures when the target from far away
-
-
-A pooling layer is generally used to ...
-
-Decrease the size of the output
-Prevent overfitting
-
-
-
-#### Better regularizer
-According to the class contents, pooling layers have fallen out of favor recently. Some reasons are:
-
-Recent datasets are so big and complex we're more concerned about underfitting.
-Dropout is a much better regularizer.
-Pooling results in a loss of information. Think about the max pooling operation as an example. We only keep the largest of n numbers, thereby disregarding n-1 numbers completely.
-
-any people dislike the pooling operation and think that we can get away without it. For example, Striving for Simplicity: The All Convolutional Net proposes to discard the pooling layer in favor of architecture that only consists of repeated CONV layers. To reduce the size of the representation they suggest using larger stride in CONV layer once in a while
-
-#### More features
-spatial information
-1x1 convolution depth might remove spatial information
+![fm-3](images/faraway_target.png)
 
 #### More deep network 
+To handle more complex shapes or structure, more deep network layer is needed. Therefore, more deep net might solve the far away target problem described above.
 
-The encoding stage exsists to extract features that will be useful for segmentation from the specific image. It does this via multiple layers that start by finding simple patterns in the first layer, and then gradually learns to understand more and more complex shapes/structures/feautures in each image the deeper the network goes. This is why I chose to do a 5 layer network; to allow it to increase the features it can find when presented with the training data.
+#### Better regularizer
+In this project, I chose max pooling which is generally used to decrease the size of the output and prevent overfitting. According to the class contents, pooling layers have fallen out of favor recently due to some reasons. Therefore, other advanced techniques like dropout might improve the accuracy.
+
+#### More spatial features
+To achieve more accurate segmentation results, more precise spatial information should be needed. My 1x1 convolution whose depth is twenty might remove spatial information unnecessarily.
 
 #### More data
-
+As described above section, my network model can obtain the required score of 40%. But more data are needed for various follow-me scenario which is not provided by the project. 
 
