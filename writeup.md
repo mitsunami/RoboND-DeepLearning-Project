@@ -197,9 +197,9 @@ The Intersection over Union (IoU) score is 44%. The network obtain an accuracy g
 
 Result image and video of QuadRotor Simulator are shown below:
 
-![fm-1](images/RoboND-QuadRotor-Unity-Simulator 2017_10_11 13_32_36.png)
+![fm-1](images/RoboND-QuadRotor-Unity-Simulator.png)
 
-![fm-2](images/RoboND-QuadRotor-Unity-Simulator 2017_10_11 13_35_39.mp4)
+![fm-2](images/RoboND-QuadRotor-Unity-Simulator.mp4)
 
 
 
